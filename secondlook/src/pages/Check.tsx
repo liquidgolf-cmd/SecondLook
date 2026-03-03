@@ -7,6 +7,7 @@ import { useUser } from '../hooks/useUser'
 
 export default function Check() {
   const [message, setMessage] = useState('')
+  const [helpRequested, setHelpRequested] = useState(false)
   const { analysis, state, analyze, reset, logUserAction } = useNora()
   const { profile } = useUser()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -23,12 +24,13 @@ export default function Check() {
     await logUserAction('continued')
     reset()
     setMessage('')
+    setHelpRequested(false)
     textareaRef.current?.focus()
   }
 
   const handleAskForHelp = async () => {
+    setHelpRequested(true)
     await logUserAction('contacted_family')
-    // TODO: trigger family notification UI
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -147,9 +149,10 @@ export default function Check() {
               analysis={analysis}
               onContinue={handleContinue}
               onAskForHelp={handleAskForHelp}
+              helpRequested={helpRequested}
             />
             <button
-              onClick={() => { reset(); setMessage('') }}
+              onClick={() => { reset(); setMessage(''); setHelpRequested(false) }}
               style={{
                 display: 'block',
                 margin: '16px auto 0',

@@ -7,6 +7,7 @@ interface RiskCardProps {
   analysis: NoraAnalysis
   onContinue?: () => void
   onAskForHelp?: () => void
+  helpRequested?: boolean
 }
 
 const topBarColor: Record<string, string> = {
@@ -15,7 +16,7 @@ const topBarColor: Record<string, string> = {
   high: '#1C2B4A',   // navy — never red
 }
 
-export default function RiskCard({ analysis, onContinue, onAskForHelp }: RiskCardProps) {
+export default function RiskCard({ analysis, onContinue, onAskForHelp, helpRequested }: RiskCardProps) {
   const barColor = topBarColor[analysis.risk_level] || '#4A8FA8'
 
   return (
@@ -96,24 +97,49 @@ export default function RiskCard({ analysis, onContinue, onAskForHelp }: RiskCar
             pauseSeconds={analysis.pause_seconds}
             onContinue={onContinue}
           />
-          <button
-            onClick={onAskForHelp}
-            style={{
-              width: '100%',
-              padding: '14px 24px',
-              borderRadius: '999px',
-              border: '1.5px solid #1C2B4A',
-              background: 'transparent',
-              color: '#1C2B4A',
-              fontFamily: "'DM Sans', system-ui, sans-serif",
-              fontSize: '1rem',
-              fontWeight: 500,
-              cursor: 'pointer',
-              minHeight: '52px',
-            }}
-          >
-            I'd like some help
-          </button>
+          {helpRequested ? (
+            <motion.div
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              style={{
+                padding: '16px 20px',
+                borderRadius: '12px',
+                backgroundColor: '#F0F7F5',
+                border: '1px solid #C0DDD5',
+              }}
+            >
+              <p style={{
+                margin: 0,
+                fontFamily: "'Playfair Display', Georgia, serif",
+                fontStyle: 'italic',
+                fontSize: '1rem',
+                color: '#1C2B4A',
+                lineHeight: 1.55,
+              }}>
+                Good thinking. If you have a family contact set up, they've been notified. Otherwise, consider reaching out to someone you trust.
+              </p>
+            </motion.div>
+          ) : (
+            <button
+              onClick={onAskForHelp}
+              style={{
+                width: '100%',
+                padding: '14px 24px',
+                borderRadius: '999px',
+                border: '1.5px solid #1C2B4A',
+                background: 'transparent',
+                color: '#1C2B4A',
+                fontFamily: "'DM Sans', system-ui, sans-serif",
+                fontSize: '1rem',
+                fontWeight: 500,
+                cursor: 'pointer',
+                minHeight: '52px',
+              }}
+            >
+              I'd like some help
+            </button>
+          )}
         </div>
       </div>
     </motion.div>

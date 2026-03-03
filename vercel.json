@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd secondlook && npm install && npm run build",
+  "outputDirectory": "secondlook/dist",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SecondLook — Double-check because it matters.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1C2B4A;
+    --navy-mid: #2A3F62;
+    --teal: #4A8FA8;
+    --teal-light: #6BAFC5;
+    --warm-cream: #F9F6F1;
+    --warm-mid: #EDE8DF;
+    --sand: #D4C9B4;
+    --text-dark: #1C2B4A;
+    --text-mid: #4A5568;
+    --text-light: #7A8BA0;
+    --white: #FFFFFF;
+    --nora-soft: #E8F4F8;
+    --accent-gold: #C8A96E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--warm-cream);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    background: rgba(249, 246, 241, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(212, 201, 180, 0.4);
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: -0.5px;
+    position: relative;
+    display: inline-block;
+  }
+
+  .logo::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--teal);
+    border-radius: 2px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    align-items: center;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-mid);
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--navy); }
+
+  .nav-cta {
+    background: var(--navy);
+    color: var(--white) !important;
+    padding: 10px 24px;
+    border-radius: 40px;
+    font-weight: 500 !important;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--navy-mid) !important; color: var(--white) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 60px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 70% at 70% 40%, rgba(74, 143, 168, 0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 50% at 20% 80%, rgba(200, 169, 110, 0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .hero-eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+
+  .hero-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 4vw, 58px);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--navy);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.4s;
+  }
+
+  .hero-headline em {
+    font-style: italic;
+    color: var(--teal);
+    position: relative;
+    display: inline-block;
+  }
+
+  .hero-headline em::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--teal);
+    border-radius: 2px;
+    animation: underlineGrow 0.6s ease forwards 1.2s;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--text-mid);
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.6s;
+  }
+
+  .hero-mantra {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--text-light);
+    margin-bottom: 44px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.7s;
+    letter-spacing: 0.3px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.9s;
+  }
+
+  .btn-primary {
+    background: var(--navy);
+    color: var(--white);
+    padding: 15px 32px;
+    border-radius: 40px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    transition: all 0.25s;
+    box-shadow: 0 4px 20px rgba(28, 43, 74, 0.2);
+  }
+
+  .btn-primary:hover {
+    background: var(--navy-mid);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(28, 43, 74, 0.25);
+  }
+
+  .btn-secondary {
+    font-size: 14px;
+    color: var(--text-mid);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+
+  .btn-secondary:hover { color: var(--navy); }
+
+  .btn-secondary::after { content: '→'; }
+
+  /* NORA CARD */
+  .hero-right {
+    opacity: 0;
+    animation: fadeIn 1s ease forwards 0.8s;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .nora-card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 8px 40px rgba(28, 43, 74, 0.08);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nora-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--teal), var(--teal-light));
+  }
+
+  .nora-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .nora-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal) 0%, var(--navy) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--white);
+    font-style: italic;
+    flex-shrink: 0;
+  }
+
+  .nora-info-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 2px;
+  }
+
+  .nora-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--navy);
+  }
+
+  .nora-bubble {
+    background: var(--nora-soft);
+    border-radius: 16px 16px 16px 4px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+
+  .nora-bubble p {
+    font-size: 15px;
+    color: var(--navy);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .message-scan {
+    background: var(--warm-mid);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    border-left: 3px solid var(--sand);
+    position: relative;
+  }
+
+  .scan-underline {
+    background: rgba(74, 143, 168, 0.15);
+    border-radius: 2px;
+    text-decoration: underline;
+    text-decoration-color: var(--teal);
+    text-decoration-thickness: 2px;
+    color: var(--navy);
+  }
+
+  .nora-flags {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .flag-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-mid);
+  }
+
+  .flag-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    flex-shrink: 0;
+  }
+
+  .nora-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .nora-btn {
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .nora-btn-primary {
+    background: var(--navy);
+    color: var(--white);
+  }
+
+  .nora-btn-secondary {
+    background: var(--warm-mid);
+    color: var(--text-mid);
+  }
+
+  .nora-btn:hover { transform: scale(1.02); }
+
+  /* PEACE CARD */
+  .peace-card {
+    background: var(--navy);
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .peace-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  .peace-text {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.5;
+  }
+
+  .peace-text strong {
+    display: block;
+    font-size: 15px;
+    color: var(--white);
+    font-weight: 400;
+    margin-bottom: 2px;
+    font-family: 'DM Serif Display', serif;
+  }
+
+  /* SECTION: THREE PILLARS */
+  .pillars-section {
+    padding: 120px 60px;
+    background: var(--white);
+  }
+
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .section-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 3.5vw, 44px);
+    color: var(--navy);
+    text-align: center;
+    font-weight: 400;
+    line-height: 1.25;
+    margin-bottom: 16px;
+  }
+
+  .section-sub {
+    font-size: 16px;
+    color: var(--text-mid);
+    text-align: center;
+    font-weight: 300;
+    max-width: 560px;
+    margin: 0 auto 72px;
+    line-height: 1.7;
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  .pillar-card {
+    padding: 40px 32px;
+    border-radius: 20px;
+    background: var(--warm-cream);
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .pillar-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(28, 43, 74, 0.08);
+  }
+
+  .pillar-icon-wrap {
+    width: 56px;
+    height: 56px;
+    background: var(--nora-soft);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    font-size: 24px;
+  }
+
+  .pillar-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .pillar-tagline {
+    font-size: 13px;
+    color: var(--teal);
+    font-style: italic;
+    margin-bottom: 16px;
+    font-family: 'DM Serif Display', serif;
+  }
+
+  .pillar-desc {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .pillar-underline {
+    width: 40px;
+    height: 2px;
+    background: var(--teal);
+    border-radius: 2px;
+    margin-top: 24px;
+    transition: width 0.3s;
+  }
+
+  .pillar-card:hover .pillar-underline { width: 70px; }
+
+  /* HOW IT WORKS */
+  .how-section {
+    padding: 120px 60px;
+    background: var(--warm-cream);
+  }
+
+  .how-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .how-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .step-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .step-content h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--navy);
+    margin-bottom: 6px;
+    font-weight: 400;
+  }
+
+  .step-content p {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* PHONE MOCKUP */
+  .phone-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .phone {
+    width: 280px;
+    background: var(--navy);
+    border-radius: 36px;
+    padding: 20px 16px;
+    box-shadow: 0 30px 80px rgba(28, 43, 74, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 28px;
+    background: var(--navy);
+    border-radius: 0 0 20px 20px;
+    z-index: 2;
+  }
+
+  .phone-screen {
+    background: var(--warm-cream);
+    border-radius: 26px;
+    padding: 36px 14px 20px;
+    min-height: 480px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phone-app-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    padding: 0 4px;
+  }
+
+  .phone-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal), var(--navy));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 12px;
+    color: white;
+    font-style: italic;
+  }
+
+  .phone-app-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .phone-status {
+    margin-left: auto;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.8); }
+  }
+
+  .phone-message {
+    background: white;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    border-left: 3px solid var(--sand);
+  }
+
+  .phone-flag-text {
+    color: var(--navy);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: var(--teal);
+  }
+
+  .phone-nora-bubble {
+    background: var(--nora-soft);
+    border-radius: 12px 12px 12px 2px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+
+  .phone-nora-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 6px;
+  }
+
+  .phone-nora-text {
+    font-size: 13px;
+    color: var(--navy);
+    line-height: 1.5;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+  }
+
+  .phone-btns {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .phone-btn-p {
+    flex: 1;
+    background: var(--navy);
+    color: white;
+    padding: 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .phone-btn-s {
+    flex: 1;
+    background: var(--warm-mid);
+    color: var(--text-mid);
+    padding: 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    text-align: center;
+  }
+
+  .phone-bottom-indicator {
+    text-align: center;
+    font-size: 10px;
+    color: var(--text-light);
+    margin-top: 16px;
+    font-style: italic;
+  }
+
+  /* NORA SECTION */
+  .nora-section {
+    padding: 120px 60px;
+    background: var(--navy);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nora-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(74, 143, 168, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .nora-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+  }
+
+  .nora-left .section-label { text-align: left; }
+
+  .nora-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 3vw, 44px);
+    color: var(--white);
+    font-weight: 400;
+    line-height: 1.25;
+    margin-bottom: 20px;
+  }
+
+  .nora-headline em {
+    font-style: italic;
+    color: var(--teal-light);
+  }
+
+  .nora-desc {
+    font-size: 16px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 40px;
+  }
+
+  .nora-traits {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .trait {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .trait-mark {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(74, 143, 168, 0.25);
+    border: 1px solid var(--teal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .trait-mark::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal-light);
+  }
+
+  .trait-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .trait-text strong {
+    color: var(--white);
+    font-weight: 400;
+  }
+
+  /* NORA DEMO CARD */
+  .nora-demo {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 24px;
+    padding: 36px;
+  }
+
+  .nora-demo-persona {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .nora-demo-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4A8FA8 0%, #2A3F62 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: var(--white);
+    font-style: italic;
+    box-shadow: 0 0 0 3px rgba(74,143,168,0.3);
+  }
+
+  .nora-demo-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .nora-demo-title {
+    font-size: 12px;
+    color: var(--teal-light);
+    letter-spacing: 1px;
+    font-weight: 400;
+  }
+
+  .demo-message {
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    font-style: italic;
+    color: var(--white);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+
+  .demo-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* MODES */
+  .modes-section {
+    padding: 120px 60px;
+    background: var(--white);
+  }
+
+  .modes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .mode-card {
+    padding: 36px 28px;
+    border-radius: 20px;
+    border: 2px solid var(--warm-mid);
+    transition: all 0.3s;
+    cursor: default;
+  }
+
+  .mode-card:hover {
+    border-color: var(--teal);
+    box-shadow: 0 12px 40px rgba(74, 143, 168, 0.1);
+  }
+
+  .mode-pill {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+    background: var(--nora-soft);
+    color: var(--teal);
+  }
+
+  .mode-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .mode-quote {
+    font-size: 13px;
+    font-style: italic;
+    color: var(--text-light);
+    margin-bottom: 16px;
+    font-family: 'DM Serif Display', serif;
+  }
+
+  .mode-desc {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* FAMILY */
+  .family-section {
+    padding: 100px 60px;
+    background: var(--warm-cream);
+  }
+
+  .family-content {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .family-promise {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 3vw, 40px);
+    color: var(--navy);
+    font-weight: 400;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+
+  .family-promise em {
+    font-style: italic;
+    color: var(--teal);
+  }
+
+  .family-sub {
+    font-size: 16px;
+    color: var(--text-mid);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto 60px;
+  }
+
+  .family-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    text-align: left;
+  }
+
+  .family-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 4px 24px rgba(28,43,74,0.06);
+  }
+
+  .family-card-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 16px;
+  }
+
+  .family-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--navy);
+    margin-bottom: 12px;
+    font-weight: 400;
+  }
+
+  .family-card p {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .family-summary {
+    margin-top: 16px;
+    background: var(--warm-cream);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--warm-mid);
+  }
+
+  .summary-row:last-child { border: none; }
+  .summary-ok { color: #4ade80; font-weight: 500; }
+
+  /* PRICING */
+  .pricing-section {
+    padding: 120px 60px;
+    background: var(--white);
+    text-align: center;
+  }
+
+  .pricing-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 760px;
+    margin: 60px auto 0;
+  }
+
+  .price-card {
+    border-radius: 24px;
+    padding: 40px;
+    text-align: left;
+    position: relative;
+    transition: transform 0.3s;
+  }
+
+  .price-card:hover { transform: translateY(-4px); }
+
+  .price-card-basic {
+    background: var(--warm-cream);
+    border: 2px solid var(--warm-mid);
+  }
+
+  .price-card-family {
+    background: var(--navy);
+    color: var(--white);
+  }
+
+  .price-tag {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
+  .price-card-family .price-tag { color: var(--white); }
+
+  .price-period {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 24px;
+  }
+
+  .price-card-family .price-period { color: rgba(255,255,255,0.5); }
+
+  .price-plan-name {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 8px;
+  }
+
+  .price-card-family .price-plan-name { color: var(--teal-light); }
+
+  .price-headline {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: var(--navy);
+    margin-bottom: 24px;
+  }
+
+  .price-card-family .price-headline { color: var(--white); }
+
+  .price-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .price-features li {
+    font-size: 13px;
+    color: var(--text-mid);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .price-card-family .price-features li { color: rgba(255,255,255,0.7); }
+
+  .feature-check {
+    color: var(--teal);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .price-card-family .feature-check { color: var(--teal-light); }
+
+  .price-cta {
+    display: block;
+    text-align: center;
+    padding: 13px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+  }
+
+  .price-cta-basic {
+    background: var(--navy);
+    color: var(--white);
+  }
+
+  .price-cta-family {
+    background: var(--white);
+    color: var(--navy);
+  }
+
+  .price-cta:hover { opacity: 0.9; transform: scale(1.01); }
+
+  /* PROMISE */
+  .promise-section {
+    padding: 100px 60px;
+    background: var(--warm-cream);
+    text-align: center;
+  }
+
+  .promise-box {
+    max-width: 760px;
+    margin: 0 auto;
+    background: var(--white);
+    border-radius: 32px;
+    padding: 64px;
+    box-shadow: 0 8px 50px rgba(28,43,74,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .promise-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--navy), var(--teal), var(--navy));
+  }
+
+  .promise-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 60px;
+    color: var(--teal);
+    line-height: 0.5;
+    margin-bottom: 28px;
+    opacity: 0.4;
+  }
+
+  .promise-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 2.5vw, 30px);
+    color: var(--navy);
+    line-height: 1.4;
+    font-weight: 400;
+    margin-bottom: 24px;
+  }
+
+  .promise-text em { font-style: italic; color: var(--teal); }
+
+  .promise-sub {
+    font-size: 15px;
+    color: var(--text-mid);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* CTA SECTION */
+  .cta-section {
+    padding: 120px 60px;
+    background: var(--navy);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(74, 143, 168, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-inner { position: relative; max-width: 680px; margin: 0 auto; }
+
+  .cta-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 54px);
+    color: var(--white);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+
+  .cta-headline em { font-style: italic; color: var(--teal-light); }
+
+  .cta-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 44px;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cta-btn-primary {
+    background: var(--white);
+    color: var(--navy);
+    padding: 16px 36px;
+    border-radius: 40px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.25s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+
+  .cta-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  }
+
+  .cta-btn-secondary {
+    padding: 16px 36px;
+    border-radius: 40px;
+    font-size: 15px;
+    font-weight: 400;
+    text-decoration: none;
+    color: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.25s;
+  }
+
+  .cta-btn-secondary:hover {
+    border-color: rgba(255,255,255,0.5);
+    color: var(--white);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 60px;
+    background: var(--navy);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--white);
+    letter-spacing: -0.3px;
+  }
+
+  .footer-mantra {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    font-style: italic;
+    font-family: 'DM Serif Display', serif;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: rgba(255,255,255,0.7); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes underlineGrow {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+
+  @keyframes breathe {
+    0%, 100% { opacity: 0.9; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(0.97); }
+  }
+
+  .breathing {
+    animation: breathe 3s ease-in-out infinite;
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; }
+    .hero, .pillars-section, .how-section, .nora-section,
+    .family-section, .pricing-section, .promise-section, .cta-section, footer {
+      padding-left: 24px; padding-right: 24px;
+    }
+    .hero-grid, .how-grid, .nora-content, .family-cards, .pricing-cards { grid-template-columns: 1fr; gap: 48px; }
+    .pillars-grid, .modes-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .promise-box { padding: 40px 28px; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">SecondLook</div>
+  <ul class="nav-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#nora">Meet Nora</a></li>
+    <li><a href="#family">For Families</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#cta" class="nav-cta">Get Started</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Your Digital Confidence Companion</p>
+      <h1 class="hero-headline">
+        Even the most careful people<br>can miss <em>something.</em>
+      </h1>
+      <p class="hero-sub">
+        Today's scams are designed to look real — built around urgency, 
+        familiar language, and emotional pressure. SecondLook adds a calm 
+        pause before high-risk decisions, so you can stay confident and in control.
+      </p>
+      <p class="hero-mantra">Double-check because it matters.</p>
+      <div class="hero-actions">
+        <a href="#cta" class="btn-primary">Start with SecondLook</a>
+        <a href="#how" class="btn-secondary">See how it works</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="nora-card">
+        <div class="nora-header">
+          <div class="nora-avatar">N</div>
+          <div>
+            <div class="nora-info-label">SecondLook Assistant</div>
+            <div class="nora-name">Nora</div>
+          </div>
+        </div>
+        <div class="nora-bubble">
+          <p><em>"Let's take a second look."</em></p>
+        </div>
+        <div class="message-scan">
+          <strong>Message from: IRS Collection Division</strong><br>
+          "Your account is <span class="scan-underline">frozen immediately</span>. 
+          Avoid arrest by paying $2,400 via <span class="scan-underline">gift card in the next 30 minutes.</span>"
+        </div>
+        <div class="nora-flags">
+          <div class="flag-item"><div class="flag-dot"></div> Urgent payment language detected</div>
+          <div class="flag-item"><div class="flag-dot"></div> Gift card request — common scam tactic</div>
+          <div class="flag-item"><div class="flag-dot"></div> Government agencies never request gift cards</div>
+        </div>
+        <div class="nora-actions" style="margin-top:20px;">
+          <button class="nora-btn nora-btn-primary">Take a Second Look</button>
+          <button class="nora-btn nora-btn-secondary">I'm Sure</button>
+        </div>
+      </div>
+      <div class="peace-card">
+        <div class="peace-icon">🛡️</div>
+        <div class="peace-text">
+          <strong>Stay in control — with backup when you want it.</strong>
+          SecondLook never acts without you. You always decide.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THREE PILLARS -->
+<section class="pillars-section">
+  <div class="section-inner">
+    <div class="reveal">
+      <p class="section-label">The SecondLook Promise</p>
+      <h2 class="section-headline">Familiar safety, for your digital life</h2>
+      <p class="section-sub">
+        We didn't invent caution. We built it into your phone — the same way 
+        spellcheck, caller ID, and seatbelts became everyday essentials.
+      </p>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar-card reveal">
+        <div class="pillar-icon-wrap">✍️</div>
+        <div class="pillar-name">Spellcheck</div>
+        <div class="pillar-tagline">It catches what you might miss.</div>
+        <p class="pillar-desc">
+          We flag unusual language, payment requests, and pressure tactics — 
+          so you can double-check before you act. Like spellcheck, we help 
+          you catch what a quick glance might not.
+        </p>
+        <div class="pillar-underline"></div>
+      </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-icon-wrap">📞</div>
+        <div class="pillar-name">Caller ID</div>
+        <div class="pillar-tagline">Know who's really talking.</div>
+        <p class="pillar-desc">
+          When a message claims to be from your bank, a government agency, 
+          or even a loved one, we help you verify the context before 
+          you respond. Awareness keeps you in control.
+        </p>
+        <div class="pillar-underline"></div>
+      </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-icon-wrap">🪑</div>
+        <div class="pillar-name">Seatbelt</div>
+        <div class="pillar-tagline">A little protection, built in.</div>
+        <p class="pillar-desc">
+          Scams rely on urgency. SecondLook adds a quiet moment to breathe 
+          before you act. You don't wear a seatbelt because you're reckless. 
+          You wear it because accidents happen.
+        </p>
+        <div class="pillar-underline"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="how-grid">
+    <div class="reveal">
+      <p class="section-label">How It Works</p>
+      <h2 class="section-headline" style="text-align:left;">Quiet awareness. Calm intervention.</h2>
+      <p class="section-sub" style="text-align:left; margin-left:0;">
+        SecondLook works in the background, only speaking up when something 
+        is worth a closer look.
+      </p>
+      <div class="how-steps">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Pattern Detection</h4>
+            <p>SecondLook quietly watches for high-risk signals: urgency language, 
+            gift card requests, crypto instructions, or impersonation patterns — 
+            even when they sound familiar.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Calm Interruption</h4>
+            <p>Nora appears — not with an alarm, but with a gentle pause. The screen 
+            softens. She says: <em>"Let's take a second look."</em> You breathe. You think.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Context, Not Commands</h4>
+            <p>Nora explains simply what she noticed. No jargon. No shame. Just the 
+            information you need to decide for yourself. You're always in control.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Optional Family Backup</h4>
+            <p>For high-risk moments, you can give a trusted family member a quiet 
+            heads-up — your choice, your terms, your permissions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-wrap reveal">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-app-header">
+            <div class="phone-avatar">N</div>
+            <div class="phone-app-name">SecondLook</div>
+            <div class="phone-status"></div>
+          </div>
+          <div class="phone-message">
+            From: Grandson Kevin<br>
+            "Grandma, I'm in a bit of trouble. <span class="phone-flag-text">Please don't tell mom.</span> 
+            Can you send $800 quickly?"
+          </div>
+          <div class="phone-nora-bubble breathing">
+            <div class="phone-nora-label">Nora</div>
+            <div class="phone-nora-text">"Let's take a second look."</div>
+          </div>
+          <div class="phone-message" style="border-left-color: var(--teal); font-size:11.5px;">
+            This message includes:<br>
+            • A secrecy request ("don't tell mom")<br>
+            • Emotional urgency<br>
+            • Request for quick payment<br><br>
+            <em>Scammers often impersonate family. Consider calling directly.</em>
+          </div>
+          <div class="phone-btns">
+            <div class="phone-btn-p">Call Kevin</div>
+            <div class="phone-btn-s">I'm sure it's him</div>
+          </div>
+          <div class="phone-bottom-indicator">No data stored · You're in control</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEET NORA -->
+<section class="nora-section" id="nora">
+  <div class="nora-bg"></div>
+  <div class="nora-content">
+    <div class="nora-left reveal">
+      <p class="section-label">Meet Your Guide</p>
+      <h2 class="nora-headline">Nora — <em>steady, warm,<br>and always on your side.</em></h2>
+      <p class="nora-desc">
+        Nora is SecondLook's default guide — a calm, knowledgeable presence 
+        designed to feel like a trusted peer, not a warning system. She speaks 
+        plainly, never shames, and always respects your autonomy.
+      </p>
+      <div class="nora-traits">
+        <div class="trait">
+          <div class="trait-mark"></div>
+          <div class="trait-text"><strong>Friendly and confident</strong> — not robotic, not alarming. She speaks in short, clear sentences that restore calm.</div>
+        </div>
+        <div class="trait">
+          <div class="trait-mark"></div>
+          <div class="trait-text"><strong>One consistent voice</strong> — every time Nora appears, you hear the same steady phrase: <em>"Let's take a second look."</em></div>
+        </div>
+        <div class="trait">
+          <div class="trait-mark"></div>
+          <div class="trait-text"><strong>Optional voice</strong> — if you prefer to hear Nora, turn on audio. Warm, measured, and always calm.</div>
+        </div>
+        <div class="trait">
+          <div class="trait-mark"></div>
+          <div class="trait-text"><strong>Respectful by design</strong> — she never says "you almost got scammed." She says: "This one looks unusual."</div>
+        </div>
+      </div>
+    </div>
+    <div class="nora-demo reveal">
+      <div class="nora-demo-persona">
+        <div class="nora-demo-avatar">N</div>
+        <div>
+          <div class="nora-demo-name">Nora</div>
+          <div class="nora-demo-title">SecondLook Guide · Est. 2025</div>
+        </div>
+      </div>
+      <p class="demo-message">"Hi Linda. Think of me as a quiet safety net — here whenever you'd like a second look."</p>
+      <p class="demo-sub">Nora's first words to every new user are personal, calm, and clear. She introduces herself as backup, not a gatekeeper.</p>
+      <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1);">
+        <p style="font-size:12px; color: rgba(255,255,255,0.4); letter-spacing: 1px; text-transform: uppercase; margin-bottom:12px;">Nora speaks with calm, not commands:</p>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="background: rgba(255,255,255,0.06); border-radius:8px; padding:10px 14px; font-size:13px; color:rgba(255,255,255,0.7); font-style:italic; font-family: 'DM Serif Display', serif;">"This one looks unusual."</div>
+          <div style="background: rgba(255,255,255,0.06); border-radius:8px; padding:10px 14px; font-size:13px; color:rgba(255,255,255,0.7); font-style:italic; font-family: 'DM Serif Display', serif;">"Large transfers are sometimes used in scams."</div>
+          <div style="background: rgba(255,255,255,0.06); border-radius:8px; padding:10px 14px; font-size:13px; color:rgba(255,255,255,0.7); font-style:italic; font-family: 'DM Serif Display', serif;">"Would you like to take a closer look?"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODES -->
+<section class="modes-section">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center;">
+      <p class="section-label">Choose Your Level</p>
+      <h2 class="section-headline">Your choice. Your comfort.</h2>
+      <p class="section-sub">You decide how much Nora steps in. Three clear modes — set during onboarding, changed anytime.</p>
+    </div>
+    <div class="modes-grid">
+      <div class="mode-card reveal">
+        <div class="mode-pill">Gentle</div>
+        <div class="mode-name">Gentle Mode</div>
+        <div class="mode-quote">"Only step in when something looks high-risk."</div>
+        <p class="mode-desc">Minimal interruptions. Nora appears only for clear scam patterns — payment requests, crypto instructions, or arrest threats. Perfect for independent users who want a light safety net.</p>
+      </div>
+      <div class="mode-card reveal" style="border-color: var(--teal);">
+        <div class="mode-pill" style="background:#e6f7f0; color:#2a7a5a;">Standard · Recommended</div>
+        <div class="mode-name">Standard Mode</div>
+        <div class="mode-quote">"Give me a second opinion when something looks unusual."</div>
+        <p class="mode-desc">The default. Nora flags suspicious patterns, unusual urgency, and pressure language. Offers context before you act. Suggested for most users.</p>
+      </div>
+      <div class="mode-card reveal">
+        <div class="mode-pill">Watchful</div>
+        <div class="mode-name">Watchful Mode</div>
+        <div class="mode-quote">"Help me double-check more often."</div>
+        <p class="mode-desc">Extra verification prompts. Optional family notifications for high-risk events. Ideal for users who prefer more guardrails or families who want additional peace of mind.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAMILY -->
+<section class="family-section" id="family">
+  <div class="family-content">
+    <div class="reveal">
+      <p class="section-label" style="text-align:center;">For Families</p>
+      <h2 class="family-promise">Give them backup, <em>not control.</em></h2>
+      <p class="family-sub">SecondLook is designed to strengthen independence, not undermine it. Families get peace of mind. Seniors keep their dignity.</p>
+    </div>
+    <div class="family-cards reveal">
+      <div class="family-card">
+        <div class="family-card-label">For the Senior</div>
+        <h3>Confident. In control. On your terms.</h3>
+        <p>You choose what gets shared, when Nora steps in, and who gets notified. SecondLook never acts without your knowledge. Linda doesn't feel monitored — she feels supported.</p>
+        <div style="margin-top:20px; background: var(--nora-soft); border-radius: 10px; padding: 14px 16px; font-size:13px; color: var(--teal); font-style:italic; font-family: 'DM Serif Display', serif;">
+          "Stay in control — with backup when you want it."
+        </div>
+      </div>
+      <div class="family-card">
+        <div class="family-card-label">For the Family</div>
+        <h3>Peace of mind, without the worry.</h3>
+        <p>You don't see conversations. You don't monitor messages. You get a calm weekly summary — and a quiet alert if something high-risk appears.</p>
+        <div class="family-summary">
+          <div class="summary-row"><span>This week's messages reviewed</span><span style="color:var(--navy)">4</span></div>
+          <div class="summary-row"><span>High-risk messages flagged</span><span style="color:var(--navy)">1</span></div>
+          <div class="summary-row"><span>Payments sent after warning</span><span class="summary-ok">0</span></div>
+          <div class="summary-row"><span>Status</span><span class="summary-ok">No concerns ✓</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="section-inner">
+    <div class="reveal">
+      <p class="section-label">Simple Pricing</p>
+      <h2 class="section-headline">It only needs to work once to pay for itself.</h2>
+      <p class="section-sub">No ads. No data sales. Ever. You pay for confidence — not surveillance.</p>
+    </div>
+    <div class="pricing-cards">
+      <div class="price-card price-card-basic reveal">
+        <div class="price-plan-name">Personal</div>
+        <div class="price-tag">$9</div>
+        <div class="price-period">per month · cancel anytime</div>
+        <div class="price-headline">For individuals ready to double-check.</div>
+        <ul class="price-features">
+          <li><span class="feature-check">✓</span> Nora — your SecondLook guide</li>
+          <li><span class="feature-check">✓</span> Message & link pattern detection</li>
+          <li><span class="feature-check">✓</span> 9-second pause on high-risk actions</li>
+          <li><span class="feature-check">✓</span> Gentle, Standard, or Watchful mode</li>
+          <li><span class="feature-check">✓</span> Zero data storage, zero ads</li>
+        </ul>
+        <a href="#cta" class="price-cta price-cta-basic">Start Personal Plan</a>
+      </div>
+      <div class="price-card price-card-family reveal">
+        <div class="price-plan-name">Family</div>
+        <div class="price-tag">$15</div>
+        <div class="price-period">per month · up to 3 members</div>
+        <div class="price-headline">For families who watch out for each other.</div>
+        <ul class="price-features">
+          <li><span class="feature-check">✓</span> Everything in Personal</li>
+          <li><span class="feature-check">✓</span> Weekly safety summaries for family</li>
+          <li><span class="feature-check">✓</span> High-risk alert notifications</li>
+          <li><span class="feature-check">✓</span> Senior-controlled permission settings</li>
+          <li><span class="feature-check">✓</span> Shared onboarding experience</li>
+        </ul>
+        <a href="#cta" class="price-cta price-cta-family">Start Family Plan</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMISE -->
+<section class="promise-section">
+  <div class="promise-box reveal">
+    <div class="promise-quote">"</div>
+    <p class="promise-text">
+      You're not just protecting money.<br>
+      You're protecting <em>independence.</em>
+    </p>
+    <p class="promise-sub">SecondLook helps prevent the one moment that changes everything — the stomach-drop realization, the shame, the "how could I?" No one should face that alone. And with SecondLook, they won't have to.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-inner reveal">
+    <p class="section-label">Get Started Today</p>
+    <h2 class="cta-headline">Responsible people <em>double-check.</em></h2>
+    <p class="cta-sub">SecondLook takes minutes to set up and works quietly in the background. Start alone, or invite a family member to set it up together.</p>
+    <div class="cta-buttons">
+      <a href="#" class="cta-btn-primary">Start for $9/month</a>
+      <a href="#" class="cta-btn-secondary">Explore Family Plan</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">SecondLook</div>
+  <div class="footer-mantra">Double-check because it matters.</div>
+  <ul class="footer-links">
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Nora button interactions
+  document.querySelectorAll('.nora-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      this.style.transform = 'scale(0.96)';
+      setTimeout(() => this.style.transform = '', 150);
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SecondLook — Full Build Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1C2B4A;
+    --navy-mid: #2A3F62;
+    --teal: #4A8FA8;
+    --teal-light: #6BAFC5;
+    --cream: #F9F6F1;
+    --warm-mid: #EDE8DF;
+    --sand: #D4C9B4;
+    --white: #FFFFFF;
+    --text-dark: #1C2B4A;
+    --text-mid: #4A5568;
+    --text-light: #7A8BA0;
+    --green: #2D9F6B;
+    --amber: #C8A96E;
+    --red-soft: #C85A5A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* COVER */
+  .cover {
+    background: var(--navy);
+    padding: 80px 80px 70px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(74,143,168,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cover-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(74,143,168,0.15);
+    border: 1px solid rgba(74,143,168,0.3);
+    border-radius: 30px;
+    padding: 6px 16px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    margin-bottom: 32px;
+  }
+
+  .cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 400;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+
+  .cover h1 em {
+    font-style: italic;
+    color: var(--teal-light);
+  }
+
+  .cover-sub {
+    font-size: 17px;
+    color: rgba(255,255,255,0.55);
+    font-weight: 300;
+    margin-bottom: 48px;
+    max-width: 580px;
+  }
+
+  .cover-meta {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+
+  .meta-item label {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 4px;
+  }
+
+  .meta-item span {
+    font-size: 14px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 400;
+  }
+
+  /* MAIN */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 80px 80px;
+  }
+
+  /* SECTION HEADERS */
+  .section {
+    margin-top: 72px;
+  }
+
+  .section-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-eyebrow::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--sand);
+  }
+
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .section-intro {
+    font-size: 15px;
+    color: var(--text-mid);
+    font-weight: 300;
+    max-width: 680px;
+    margin-bottom: 32px;
+    line-height: 1.75;
+  }
+
+  /* OVERVIEW GRID */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 0;
+  }
+
+  .overview-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 24px;
+    border-left: 3px solid var(--teal);
+  }
+
+  .overview-card h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .overview-card p {
+    font-size: 13px;
+    color: var(--text-mid);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* PHASE BLOCKS */
+  .phase {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 16px rgba(28,43,74,0.05);
+  }
+
+  .phase-header {
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 1px solid var(--warm-mid);
+  }
+
+  .phase-num {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .phase-header-text h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--navy);
+    font-weight: 400;
+    margin-bottom: 3px;
+  }
+
+  .phase-timeline {
+    font-size: 12px;
+    color: var(--text-light);
+    font-weight: 400;
+  }
+
+  .phase-timeline strong {
+    color: var(--teal);
+    font-weight: 500;
+  }
+
+  .phase-body {
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+
+  .phase-body.single { grid-template-columns: 1fr; }
+
+  .phase-col h4 {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 14px;
+  }
+
+  .task-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .task-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-mid);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .task-check {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    border: 1.5px solid var(--sand);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .task-check.done {
+    background: var(--teal);
+    border-color: var(--teal);
+  }
+
+  .task-check.done::after {
+    content: '✓';
+    font-size: 10px;
+    color: white;
+    font-weight: 600;
+  }
+
+  /* TECH STACK */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .stack-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 24px;
+  }
+
+  .stack-layer {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+
+  .stack-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .stack-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .stack-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--navy);
+    min-width: 140px;
+  }
+
+  .stack-reason {
+    font-size: 13px;
+    color: var(--text-light);
+    font-weight: 300;
+  }
+
+  /* CODE BLOCKS */
+  .code-block {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 16px 0;
+    overflow-x: auto;
+  }
+
+  .code-block pre {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.8;
+    white-space: pre;
+  }
+
+  .code-comment { color: rgba(107,175,197,0.7); }
+  .code-key { color: #6BAFC5; }
+  .code-string { color: #C8A96E; }
+  .code-punct { color: rgba(255,255,255,0.4); }
+
+  /* FEATURE SPECS */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .feature-card {
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .feature-header {
+    padding: 18px 24px;
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .feature-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--white);
+    font-weight: 400;
+  }
+
+  .feature-badge {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .badge-core { background: rgba(74,143,168,0.3); color: var(--teal-light); }
+  .badge-ai { background: rgba(200,169,110,0.25); color: var(--amber); }
+  .badge-family { background: rgba(45,159,107,0.25); color: #6DC49A; }
+
+  .feature-body {
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .feature-section h5 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 10px;
+  }
+
+  .spec-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .spec-list li {
+    font-size: 13px;
+    color: var(--text-mid);
+    font-weight: 300;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .spec-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--teal);
+    font-size: 11px;
+  }
+
+  /* NORA VOICE GUIDE */
+  .nora-voice {
+    background: var(--navy);
+    border-radius: 20px;
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .voice-col h4 {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .voice-do h4 { color: #6DC49A; }
+  .voice-dont h4 { color: #E07070; }
+
+  .voice-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .voice-item {
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    line-height: 1.5;
+  }
+
+  .voice-do .voice-item { background: rgba(45,159,107,0.12); color: rgba(255,255,255,0.8); border-left: 2px solid #6DC49A; }
+  .voice-dont .voice-item { background: rgba(196,85,85,0.1); color: rgba(255,255,255,0.5); border-left: 2px solid #E07070; text-decoration: line-through; text-decoration-color: rgba(224,112,112,0.5); }
+
+  /* PROMPT BLOCK */
+  .prompt-block {
+    background: #0F1B30;
+    border-radius: 16px;
+    padding: 28px 32px;
+    border: 1px solid rgba(74,143,168,0.2);
+  }
+
+  .prompt-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .prompt-label::before {
+    content: '◆';
+    font-size: 8px;
+  }
+
+  .prompt-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.75);
+    line-height: 2;
+    white-space: pre-wrap;
+  }
+
+  /* SCHEMA */
+  .schema-block {
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .schema-header {
+    background: var(--warm-mid);
+    padding: 12px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-mid);
+    letter-spacing: 0.5px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .schema-body {
+    padding: 20px;
+  }
+
+  .schema-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .schema-table th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    padding: 0 16px 10px 0;
+    border-bottom: 1px solid var(--warm-mid);
+  }
+
+  .schema-table td {
+    padding: 8px 16px 8px 0;
+    vertical-align: top;
+    border-bottom: 1px solid var(--warm-mid);
+    color: var(--text-mid);
+    font-weight: 300;
+  }
+
+  .schema-table tr:last-child td { border: none; }
+
+  .field-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--teal);
+    font-weight: 400;
+  }
+
+  .field-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--amber);
+    background: rgba(200,169,110,0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* FOLDER TREE */
+  .folder-tree {
+    background: var(--navy);
+    border-radius: 16px;
+    padding: 24px 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.7);
+    line-height: 2;
+  }
+
+  .folder { color: var(--teal-light); }
+  .file-main { color: rgba(255,255,255,0.85); }
+  .file-comment { color: rgba(255,255,255,0.3); font-style: italic; }
+  .indent1 { padding-left: 20px; }
+  .indent2 { padding-left: 40px; }
+  .indent3 { padding-left: 60px; }
+
+  /* CURSOR PROMPTS */
+  .cursor-card {
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .cursor-header {
+    background: var(--warm-mid);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .cursor-step-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-mid);
+  }
+
+  .cursor-file {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--teal);
+    background: rgba(74,143,168,0.1);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .cursor-body {
+    padding: 20px;
+  }
+
+  .cursor-prompt {
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--text-dark);
+    line-height: 1.7;
+    font-family: 'DM Mono', monospace;
+    border-left: 3px solid var(--teal);
+    white-space: pre-wrap;
+  }
+
+  .cursor-note {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-light);
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  /* PRIVACY PILLARS */
+  .privacy-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .privacy-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 22px;
+    text-align: center;
+  }
+
+  .privacy-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .privacy-card h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .privacy-card p {
+    font-size: 12.5px;
+    color: var(--text-mid);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* MONETIZATION */
+  .mono-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .mono-table th {
+    background: var(--navy);
+    color: rgba(255,255,255,0.6);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 14px 20px;
+    text-align: left;
+  }
+
+  .mono-table td {
+    padding: 14px 20px;
+    font-size: 13px;
+    color: var(--text-mid);
+    border-bottom: 1px solid var(--warm-mid);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .mono-table tr:last-child td { border: none; }
+
+  .mono-table td:first-child { font-weight: 500; color: var(--navy); }
+
+  /* MILESTONES */
+  .milestone-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 32px;
+  }
+
+  .milestone-list::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    background: var(--warm-mid);
+  }
+
+  .milestone {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding-bottom: 28px;
+    position: relative;
+  }
+
+  .milestone-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 2px solid var(--teal);
+    flex-shrink: 0;
+    margin-left: -32px;
+    margin-top: 2px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .milestone-dot.filled { background: var(--teal); }
+
+  .milestone-dot.filled::after {
+    content: '✓';
+    font-size: 10px;
+    color: white;
+    font-weight: 700;
+  }
+
+  .milestone-content h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--navy);
+    margin-bottom: 4px;
+    font-weight: 400;
+  }
+
+  .milestone-when {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--teal);
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  .milestone-content p {
+    font-size: 13px;
+    color: var(--text-mid);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* CALLOUT */
+  .callout {
+    background: var(--nora-soft, #E8F4F8);
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin: 16px 0;
+    border-left: 3px solid var(--teal);
+    background: rgba(74,143,168,0.07);
+  }
+
+  .callout-icon { font-size: 20px; flex-shrink: 0; }
+
+  .callout-body h5 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
+  .callout-body p {
+    font-size: 13px;
+    color: var(--text-mid);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--warm-mid);
+    margin: 48px 0;
+  }
+
+  /* TAG */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    background: rgba(74,143,168,0.1);
+    color: var(--teal);
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+
+  .tag-amber { background: rgba(200,169,110,0.1); color: var(--amber); }
+  .tag-green { background: rgba(45,159,107,0.1); color: var(--green); }
+
+  @media print {
+    body { font-size: 12px; }
+    .cover { padding: 48px; }
+    .main { padding: 0 48px 48px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-badge">🛡️ &nbsp;Full Product Build Plan</div>
+  <h1>SecondLook<br><em>Implementation Blueprint</em></h1>
+  <p class="cover-sub">A complete guide to building the SecondLook web app — from project scaffolding in Cursor/Claude Code to Nora's AI system prompt, database schema, and feature specifications for all three modes.</p>
+  <div class="cover-meta">
+    <div class="meta-item">
+      <label>Platform</label>
+      <span>Web App (React + Supabase)</span>
+    </div>
+    <div class="meta-item">
+      <label>Dev Tools</label>
+      <span>Cursor · Claude Code</span>
+    </div>
+    <div class="meta-item">
+      <label>MVP Scope</label>
+      <span>Full three-mode app</span>
+    </div>
+    <div class="meta-item">
+      <label>Est. Build Time</label>
+      <span>8–12 weeks to launch</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- SECTION 1: OVERVIEW -->
+  <div class="section">
+    <div class="section-eyebrow">01 — Overview</div>
+    <h2>What You're Building</h2>
+    <p class="section-intro">SecondLook is a web-based digital safety companion that helps seniors confidently navigate messages, links, and payment requests. It features Nora — a calm AI guide — and an optional family dashboard. Here's the architectural overview before we dive in.</p>
+
+    <div class="overview-grid">
+      <div class="overview-card">
+        <h4>Frontend (React)</h4>
+        <p>Single-page app with three zones: the user dashboard, the message check interface, and the family summary view. Calm UI, minimal alerts.</p>
+      </div>
+      <div class="overview-card">
+        <h4>Backend (Supabase)</h4>
+        <p>User auth, family connections, permission settings, and weekly summary storage. No message content stored — analysis only.</p>
+      </div>
+      <div class="overview-card">
+        <h4>AI Core (Claude API)</h4>
+        <p>Nora's analysis engine. Receives a message or link, returns structured risk assessment in JSON. Never stores conversation content.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: TECH STACK -->
+  <div class="section">
+    <div class="section-eyebrow">02 — Tech Stack</div>
+    <h2>The Full Stack, Chosen for Cursor + Claude Code</h2>
+    <p class="section-intro">Every choice below is optimized for AI-assisted development. Supabase handles all the backend complexity so you can focus 90% of your effort on the product experience.</p>
+
+    <div class="stack-grid">
+      <div class="stack-card">
+        <div class="stack-layer">Frontend</div>
+        <div class="stack-items">
+          <div class="stack-item">
+            <div class="stack-name">React 18 + Vite</div>
+            <div class="stack-reason">Fast, Claude Code-friendly, huge ecosystem</div>
+          </div>
+          <div class="stack-item">
+            <div class="stack-name">TypeScript</div>
+            <div class="stack-reason">Cursor autocomplete is dramatically better with types</div>
+          </div>
+          <div class="stack-item">
+            <div class="stack-name">Tailwind CSS</div>
+            <div class="stack-reason">Utility-first, AI writes it fluently</div>
+          </div>
+          <div class="stack-item">
+            <div class="stack-name">Framer Motion</div>
+            <div class="stack-reason">Nora's breathing animation + subtle transitions</div>
+          </div>
+          <div class="stack-item">
+            <div class="stack-name">React Router v6</div>
+            <div class="stack-reason">Pages: Home, Check, Dashboard, Settings, Family</div>
+          </div>
+        </div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Backend & Auth</div>
+        <div class="stack-items">
+          <div class="stack-item">
+            <div class="stack-name">Supabase</div>
+            <div class="stack-reason">Auth, database, real-time, Row Level Security built in</div>
+          </div>
+          <div class="stack-item">
+            <div class="stack-name">Supabase Edge Functions</div>
+            <div class="stack-reason">Serverless functions to proxy Claude API calls securely</div>
+          </div>
+          <div class="stack-item">
+            <div class="stack-name">PostgreSQL (via Supabase)</div>
+            <div class="stack-reason">User profiles, family links, event logs (no message content)</div>
+          </div>
+          <div class="stack-item">
+            <div class="stack-name">Stripe</div>
+            <div class="stack-reason">Subscription billing — Personal $9, Family $15</div>
+          </div>
+        </div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">AI & Analysis</div>
+        <div class="stack-items">
+          <div class="stack-item">
+            <div class="stack-name">Claude API (claude-sonnet-4-20250514)</div>
+            <div class="stack-reason">Nora's core reasoning engine — structured JSON output</div>
+          </div>
+          <div class="stack-item">
+            <div class="stack-name">Web Speech API</div>
+            <div class="stack-reason">Optional voice output for Nora (browser-native, free)</div>
+          </div>
+          <div class="stack-item">
+            <div class="stack-name">Resend</div>
+            <div class="stack-reason">Weekly family summary emails — simple, reliable</div>
+          </div>
+        </div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Deployment</div>
+        <div class="stack-items">
+          <div class="stack-item">
+            <div class="stack-name">Vercel</div>
+            <div class="stack-reason">One-click deploys, perfect for Vite + React</div>
+          </div>
+          <div class="stack-item">
+            <div class="stack-name">Vercel Analytics</div>
+            <div class="stack-reason">Privacy-respecting usage tracking</div>
+          </div>
+          <div class="stack-item">
+            <div class="stack-name">GitHub</div>
+            <div class="stack-reason">Version control — Cursor integrates natively</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: FOLDER STRUCTURE -->
+  <div class="section">
+    <div class="section-eyebrow">03 — Project Structure</div>
+    <h2>Repository Layout</h2>
+    <p class="section-intro">This is the folder structure to initialize in Cursor or Claude Code. Keeping concerns clearly separated makes AI assistance dramatically more accurate.</p>
+
+    <div class="folder-tree">
+<span class="folder">secondlook/</span>
+<span class="indent1 folder">├── src/</span>
+<span class="indent2 folder">│   ├── components/</span>
+<span class="indent3 file-main">│   │   ├── Nora/</span>
+<span class="indent3 file-comment">│   │   │   ├── NoraAvatar.tsx       # Visual Nora with breathing animation</span>
+<span class="indent3 file-comment">│   │   │   ├── NoraBubble.tsx       # "Let's take a second look." card</span>
+<span class="indent3 file-comment">│   │   │   ├── NoraOverlay.tsx      # Full-screen soft interruption</span>
+<span class="indent3 file-comment">│   │   │   └── NoraVoice.tsx        # Web Speech API wrapper</span>
+<span class="indent3 file-main">│   │   ├── Check/</span>
+<span class="indent3 file-comment">│   │   │   ├── MessageInput.tsx     # Paste area for user messages</span>
+<span class="indent3 file-comment">│   │   │   ├── RiskCard.tsx         # Nora's analysis result card</span>
+<span class="indent3 file-comment">│   │   │   ├── FlagItem.tsx         # Individual detected pattern</span>
+<span class="indent3 file-comment">│   │   │   └── PauseButton.tsx      # 9-second breathing button</span>
+<span class="indent3 file-main">│   │   ├── Dashboard/</span>
+<span class="indent3 file-comment">│   │   │   ├── WeeklySummary.tsx    # "This week: 0 concerns"</span>
+<span class="indent3 file-comment">│   │   │   ├── ActivityFeed.tsx     # Recent checks (no content stored)</span>
+<span class="indent3 file-comment">│   │   │   └── ModeSelector.tsx     # Gentle / Standard / Watchful</span>
+<span class="indent3 file-main">│   │   ├── Family/</span>
+<span class="indent3 file-comment">│   │   │   ├── FamilyInvite.tsx     # Send invite to family member</span>
+<span class="indent3 file-comment">│   │   │   ├── PermissionPanel.tsx  # Senior controls what family sees</span>
+<span class="indent3 file-comment">│   │   │   └── FamilySummary.tsx    # Family dashboard view</span>
+<span class="indent3 file-main">│   │   └── ui/</span>
+<span class="indent3 file-comment">│   │       ├── Button.tsx           # Nora-style calm buttons</span>
+<span class="indent3 file-comment">│   │       └── UnderlineMotif.tsx   # Brand signature animation</span>
+<span class="indent2 folder">│   ├── pages/</span>
+<span class="indent3 file-comment">│   │   ├── Home.tsx                # Landing + onboarding entry</span>
+<span class="indent3 file-comment">│   │   ├── Onboarding.tsx          # Name, mode, family setup</span>
+<span class="indent3 file-comment">│   │   ├── Check.tsx               # Main check interface</span>
+<span class="indent3 file-comment">│   │   ├── Dashboard.tsx           # User's summary view</span>
+<span class="indent3 file-comment">│   │   ├── Family.tsx              # Family connection management</span>
+<span class="indent3 file-comment">│   │   └── Settings.tsx            # Mode, voice, permissions</span>
+<span class="indent2 folder">│   ├── lib/</span>
+<span class="indent3 file-comment">│   │   ├── nora.ts                 # Nora analysis API calls</span>
+<span class="indent3 file-comment">│   │   ├── supabase.ts             # Supabase client</span>
+<span class="indent3 file-comment">│   │   └── stripe.ts               # Stripe helpers</span>
+<span class="indent2 folder">│   ├── hooks/</span>
+<span class="indent3 file-comment">│   │   ├── useNora.ts              # Analysis state + streaming</span>
+<span class="indent3 file-comment">│   │   ├── useUser.ts              # Auth + profile</span>
+<span class="indent3 file-comment">│   │   └── useFamily.ts            # Family connection state</span>
+<span class="indent2 folder">│   └── types/</span>
+<span class="indent3 file-comment">│       ├── nora.ts                 # NoraAnalysis, RiskLevel, FlagType</span>
+<span class="indent3 file-comment">│       └── user.ts                 # User, FamilyMember, Mode</span>
+<span class="indent1 folder">├── supabase/</span>
+<span class="indent2 file-comment">│   ├── functions/analyze/          # Edge Function: proxy to Claude API</span>
+<span class="indent2 file-comment">│   └── migrations/                 # Database schema files</span>
+<span class="indent1 file-comment">├── .env.local                      # VITE_SUPABASE_URL, keys (never commit)</span>
+<span class="indent1 file-comment">└── README.md                       # Setup + Claude Code instructions</span>
+    </div>
+  </div>
+
+  <!-- SECTION 4: DATABASE SCHEMA -->
+  <div class="section">
+    <div class="section-eyebrow">04 — Database Schema</div>
+    <h2>What Gets Stored (And What Doesn't)</h2>
+    <p class="section-intro">SecondLook's privacy promise is architectural: <strong>message content is never stored.</strong> Only metadata about risk events is saved — enough for weekly summaries, never enough to reconstruct a conversation.</p>
+
+    <div class="callout">
+      <div class="callout-icon">🔒</div>
+      <div class="callout-body">
+        <h5>Privacy-first schema rule</h5>
+        <p>Every table below has Row Level Security enabled in Supabase. Users can only read/write their own rows. Family members see only summary counts — never message text.</p>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div class="schema-block">
+        <div class="schema-header">users</div>
+        <div class="schema-body">
+          <table class="schema-table">
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+            <tr><td class="field-name">id</td><td><span class="field-type">uuid</span></td><td>Supabase auth user ID</td></tr>
+            <tr><td class="field-name">first_name</td><td><span class="field-type">text</span></td><td>For Nora's personal greeting ("Hi Linda.")</td></tr>
+            <tr><td class="field-name">mode</td><td><span class="field-type">enum</span></td><td>'gentle' | 'standard' | 'watchful'</td></tr>
+            <tr><td class="field-name">voice_enabled</td><td><span class="field-type">boolean</span></td><td>Whether Nora speaks aloud</td></tr>
+            <tr><td class="field-name">family_share_level</td><td><span class="field-type">enum</span></td><td>'none' | 'high_risk_only' | 'weekly_summary'</td></tr>
+            <tr><td class="field-name">stripe_customer_id</td><td><span class="field-type">text</span></td><td>For billing management</td></tr>
+            <tr><td class="field-name">plan</td><td><span class="field-type">enum</span></td><td>'personal' | 'family' | 'trial'</td></tr>
+            <tr><td class="field-name">created_at</td><td><span class="field-type">timestamp</span></td><td>Auto-set by Supabase</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="schema-block">
+        <div class="schema-header">risk_events  &nbsp;·&nbsp; <span style="color:#C85A5A; font-size:11px;">NO message content stored</span></div>
+        <div class="schema-body">
+          <table class="schema-table">
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+            <tr><td class="field-name">id</td><td><span class="field-type">uuid</span></td><td>Event ID</td></tr>
+            <tr><td class="field-name">user_id</td><td><span class="field-type">uuid</span></td><td>FK → users</td></tr>
+            <tr><td class="field-name">risk_level</td><td><span class="field-type">enum</span></td><td>'low' | 'medium' | 'high'</td></tr>
+            <tr><td class="field-name">flag_types</td><td><span class="field-type">text[]</span></td><td>e.g. ['urgency', 'crypto_request', 'secrecy']</td></tr>
+            <tr><td class="field-name">user_action</td><td><span class="field-type">enum</span></td><td>'paused' | 'continued' | 'contacted_family'</td></tr>
+            <tr><td class="field-name">family_notified</td><td><span class="field-type">boolean</span></td><td>Was family alert sent?</td></tr>
+            <tr><td class="field-name">created_at</td><td><span class="field-type">timestamp</span></td><td>For weekly summaries</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="schema-block">
+        <div class="schema-header">family_connections</div>
+        <div class="schema-body">
+          <table class="schema-table">
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+            <tr><td class="field-name">id</td><td><span class="field-type">uuid</span></td><td>Connection ID</td></tr>
+            <tr><td class="field-name">senior_user_id</td><td><span class="field-type">uuid</span></td><td>FK → users (the senior)</td></tr>
+            <tr><td class="field-name">family_user_id</td><td><span class="field-type">uuid</span></td><td>FK → users (the family member)</td></tr>
+            <tr><td class="field-name">relationship</td><td><span class="field-type">text</span></td><td>e.g. "daughter", "son" — senior enters this</td></tr>
+            <tr><td class="field-name">status</td><td><span class="field-type">enum</span></td><td>'pending' | 'active' | 'paused'</td></tr>
+            <tr><td class="field-name">notify_on_high_risk</td><td><span class="field-type">boolean</span></td><td>Senior-controlled setting</td></tr>
+            <tr><td class="field-name">invite_token</td><td><span class="field-type">text</span></td><td>One-time token for family invite link</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: NORA'S AI SYSTEM PROMPT -->
+  <div class="section">
+    <div class="section-eyebrow">05 — Nora's AI Core</div>
+    <h2>The System Prompt That Powers Nora</h2>
+    <p class="section-intro">This is the exact system prompt to use in your Supabase Edge Function when calling the Claude API. It defines Nora's personality, analysis framework, and required JSON output format. Copy this exactly.</p>
+
+    <div class="prompt-block">
+      <div class="prompt-label">Supabase Edge Function · analyze/index.ts · System Prompt</div>
+      <div class="prompt-text">You are Nora, a calm and trusted digital safety companion for SecondLook.
+
+Your role is to analyze messages, links, or text that a user has submitted for a second opinion. You are NOT a warning system. You are a helpful assistant who notices unusual patterns and provides gentle, non-judgmental context.
+
+PERSONALITY RULES — follow these exactly:
+- Always calm. Never alarming. Never dramatic.
+- Speak in short, clear sentences.
+- Never shame the user. Normalize human error.
+- Never say: "This is a scam", "You are in danger", "High risk detected"
+- Never use exclamation points.
+- Always say: "This message includes..." not "This is a..."
+- Place blame on the scam design, never the user.
+- Always preserve autonomy — the user decides what to do.
+
+DETECTION PATTERNS — flag these when present:
+1. urgency_language — "immediately", "30 minutes", "urgent", "right now"
+2. payment_pressure — requests for payment, wire, Venmo, Zelle
+3. crypto_request — Bitcoin, crypto, gift cards, prepaid cards
+4. secrecy_request — "don't tell", "keep this between us", "don't mention"
+5. authority_impersonation — FBI, IRS, bank, Medicare, Social Security
+6. family_impersonation — claims to be grandchild, relative in trouble
+7. threat_language — arrest, lawsuit, account closure, legal action
+8. link_suspicion — mismatched domains, misspelled brands, redirect chains
+
+RISK LEVELS:
+- low: 0–1 flags present, content seems normal
+- medium: 2–3 flags, warrants a second look
+- high: 3+ flags, or any crypto/gift card request, or any secrecy + payment combo
+
+OUTPUT FORMAT — respond ONLY with valid JSON, no other text:
+{
+  "risk_level": "low" | "medium" | "high",
+  "nora_message": "Her exact words to the user — calm, 1-2 sentences max",
+  "flags": [
+    {
+      "type": "urgency_language",
+      "plain_english": "This message creates a sense of urgency.",
+      "educational_note": "Legitimate organizations rarely demand immediate action."
+    }
+  ],
+  "recommended_actions": ["Call your bank directly", "Ask a trusted family member"],
+  "pause_seconds": 0 | 5 | 9
+}
+
+NORA'S MESSAGE EXAMPLES by risk level:
+- low: "This one looks straightforward. No unusual patterns detected."
+- medium: "This message includes some patterns worth a closer look."  
+- high: "Let's take a second look. This message includes several patterns often used in scams."
+
+The pause_seconds field: return 0 for low, 5 for medium, 9 for high risk.
+For high risk involving crypto or gift cards, always return 9.
+
+Remember: You are backup, not a gatekeeper. The user is always in control.</div>
+    </div>
+
+    <div style="margin-top: 16px;">
+      <div class="callout">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body">
+          <h5>Mode-based sensitivity</h5>
+          <p>Pass the user's mode ('gentle', 'standard', 'watchful') as a variable in the user message: <span style="font-family: monospace; font-size: 12px; color: var(--teal);">"User mode: gentle. Analyze: [message]"</span>. In gentle mode, only surface high-risk results. In watchful mode, surface medium and high.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: NORA VOICE RULES -->
+  <div class="section">
+    <div class="section-eyebrow">06 — Nora's Voice Design</div>
+    <h2>How Nora Speaks — the Brand Rule Set</h2>
+    <p class="section-intro">These rules govern every piece of UI copy Nora generates. Paste this into your Cursor rules file or .cursorrules so AI-generated copy stays on brand.</p>
+
+    <div class="nora-voice">
+      <div class="voice-col voice-do">
+        <h4>✓ &nbsp;Nora Says</h4>
+        <div class="voice-items">
+          <div class="voice-item">"Let's take a second look."</div>
+          <div class="voice-item">"This message includes urgency language."</div>
+          <div class="voice-item">"This one looks unusual."</div>
+          <div class="voice-item">"Large transfers are sometimes used in scams."</div>
+          <div class="voice-item">"Would you like to take a closer look?"</div>
+          <div class="voice-item">"Thanks for taking a second look."</div>
+          <div class="voice-item">"Scammers often create urgency. Taking a moment helps."</div>
+          <div class="voice-item">"You're always in control."</div>
+        </div>
+      </div>
+      <div class="voice-col voice-dont">
+        <h4>✗ &nbsp;Nora Never Says</h4>
+        <div class="voice-items">
+          <div class="voice-item">"WARNING: HIGH RISK DETECTED!"</div>
+          <div class="voice-item">"This is a scam."</div>
+          <div class="voice-item">"You are in danger."</div>
+          <div class="voice-item">"Don't click this!"</div>
+          <div class="voice-item">"You almost got scammed."</div>
+          <div class="voice-item">"This is unsafe."</div>
+          <div class="voice-item">"You should not proceed."</div>
+          <div class="voice-item">"Threat identified. Blocking."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: FEATURE SPECS -->
+  <div class="section">
+    <div class="section-eyebrow">07 — Feature Specifications</div>
+    <h2>Core Features — What to Build</h2>
+    <p class="section-intro">Each feature below includes front-end behavior, back-end requirements, and Cursor prompt suggestions to accelerate development.</p>
+
+    <div class="feature-grid">
+
+      <!-- FEATURE 1 -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <div class="feature-title">Message Check Interface</div>
+          <span class="feature-badge badge-core">Core</span>
+        </div>
+        <div class="feature-body">
+          <div class="feature-section">
+            <h5>User Experience</h5>
+            <ul class="spec-list">
+              <li>Large, inviting textarea: "Paste a message, text, or email here"</li>
+              <li>Single CTA button: "Get Nora's Second Look"</li>
+              <li>Nora avatar animates with breathing effect during analysis (1–3 seconds)</li>
+              <li>Result appears as a calm card — green/yellow/navy color coding (not red)</li>
+              <li>Pause button greys out for pause_seconds before user can dismiss</li>
+              <li>Optional voice: Nora speaks her message if enabled</li>
+              <li>Two actions: "Continue anyway" / "Ask for help" (contacts family)</li>
+            </ul>
+          </div>
+          <div class="feature-section">
+            <h5>Technical Requirements</h5>
+            <ul class="spec-list">
+              <li>POST to Supabase Edge Function /analyze with message text + user mode</li>
+              <li>Receive structured JSON from Claude — display flags in plain English</li>
+              <li>Log risk_event to database (metadata only, no message text)</li>
+              <li>If high risk + family_share_level includes alerts → trigger notification</li>
+              <li>Web Speech API: window.speechSynthesis for Nora's voice</li>
+              <li>No message text stored in database after analysis is complete</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEATURE 2 -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <div class="feature-title">Nora Overlay + 9-Second Pause</div>
+          <span class="feature-badge badge-ai">AI Behavior</span>
+        </div>
+        <div class="feature-body">
+          <div class="feature-section">
+            <h5>Interaction Design</h5>
+            <ul class="spec-list">
+              <li>Screen softens (brightness 90% via CSS filter) when Nora appears</li>
+              <li>Nora avatar fades in bottom-right corner — no bounce, no flash</li>
+              <li>Slow breathing animation: 2s inhale, 2s exhale (Framer Motion)</li>
+              <li>Risky text gets underline animation — teal, 0.4s draw from left</li>
+              <li>Primary action button opacity: 0.4 → 1.0 over pause_seconds duration</li>
+              <li>Progress ring around Nora avatar counts down the pause visually</li>
+              <li>User can always click "I'm sure" to bypass — no hard blocks ever</li>
+            </ul>
+          </div>
+          <div class="feature-section">
+            <h5>Animation Specs</h5>
+            <ul class="spec-list">
+              <li>Breathing: scale 1.0 → 1.03 → 1.0, opacity 0.9 → 0.7 → 0.9</li>
+              <li>Overlay fade-in: opacity 0 → 1, duration 600ms, ease-in-out</li>
+              <li>Screen softening: CSS filter brightness(0.9), transition 500ms</li>
+              <li>Underline: SVG path draw animation, stroke-dashoffset technique</li>
+              <li>Button enable: opacity transition, not visibility — always tappable</li>
+              <li>Exit: overlay fades out over 400ms, screen returns to full brightness</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEATURE 3 -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <div class="feature-title">Three Modes — Gentle, Standard, Watchful</div>
+          <span class="feature-badge badge-core">Core</span>
+        </div>
+        <div class="feature-body">
+          <div class="feature-section">
+            <h5>Mode Behavior Differences</h5>
+            <ul class="spec-list">
+              <li><strong>Gentle:</strong> Only show Nora for high risk. Low/medium = silent pass</li>
+              <li><strong>Standard:</strong> Show Nora for medium + high. Low = silent green check</li>
+              <li><strong>Watchful:</strong> Show Nora for all results. Extra family notification triggers</li>
+              <li>Mode stored in users table, respected in every analysis call</li>
+              <li>Pass mode to Edge Function: Claude adjusts output accordingly</li>
+              <li>In-app mode switcher: three cards with radio selection, saves instantly</li>
+            </ul>
+          </div>
+          <div class="feature-section">
+            <h5>Mode UX Copy</h5>
+            <ul class="spec-list">
+              <li>Gentle label: "Only step in when something looks high-risk."</li>
+              <li>Standard label: "Give me a second opinion when something looks unusual."</li>
+              <li>Watchful label: "Help me double-check more often."</li>
+              <li>Mode change confirmation: "Got it, Linda. I'll stay in the background more."</li>
+              <li>No dark patterns — switching to Gentle is celebrated, not discouraged</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEATURE 4 -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <div class="feature-title">Family Dashboard + Alerts</div>
+          <span class="feature-badge badge-family">Family</span>
+        </div>
+        <div class="feature-body">
+          <div class="feature-section">
+            <h5>Senior Controls (Permission Panel)</h5>
+            <ul class="spec-list">
+              <li>Toggle: "Notify [Name] for high-risk events only"</li>
+              <li>Toggle: "Share weekly summaries with [Name]"</li>
+              <li>Toggle: "Private mode — no family notifications"</li>
+              <li>Senior sees exactly what family sees — no hidden info</li>
+              <li>"Shared summary active" indicator always visible to senior</li>
+              <li>One-tap to revoke access, no confirmation dark pattern</li>
+            </ul>
+          </div>
+          <div class="feature-section">
+            <h5>Family View (Read-Only)</h5>
+            <ul class="spec-list">
+              <li>Shows: messages reviewed count, high-risk events, payments after warnings</li>
+              <li>Never shows: message content, what was typed, conversation threads</li>
+              <li>Weekly email via Resend: "Linda's SecondLook Weekly Summary"</li>
+              <li>High-risk alert email: neutral tone — "A high-risk pattern was detected. No action was taken. You may want to check in."</li>
+              <li>Family can't change senior's settings — view only, always</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEATURE 5 -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <div class="feature-title">Onboarding Flow</div>
+          <span class="feature-badge badge-core">Core</span>
+        </div>
+        <div class="feature-body">
+          <div class="feature-section">
+            <h5>Screen Sequence</h5>
+            <ul class="spec-list">
+              <li><strong>Screen 1:</strong> "What's your first name?" — Nora uses this personally</li>
+              <li><strong>Screen 2:</strong> Nora's greeting: "Hi [Name]. Think of me as a quiet safety net — here whenever you'd like a second look."</li>
+              <li><strong>Screen 3:</strong> Mode selection — three cards with plain-English descriptions</li>
+              <li><strong>Screen 4:</strong> "Would you like to share safety summaries with a family member?" — optional, skippable</li>
+              <li><strong>Screen 5:</strong> Voice preference — "Would you like Nora to speak her guidance aloud?"</li>
+              <li><strong>Screen 6:</strong> Privacy transparency screen (see below)</li>
+            </ul>
+          </div>
+          <div class="feature-section">
+            <h5>Privacy Screen Content</h5>
+            <ul class="spec-list">
+              <li>"What Nora scans: payment requests, urgency language, crypto references, impersonation patterns"</li>
+              <li>"What SecondLook does not do: store your messages, share conversations, access your accounts"</li>
+              <li>"Data stored: 0 messages. Analysis metadata only."</li>
+              <li>"You can delete everything, anytime, in Settings."</li>
+              <li>Visual data dashboard mockup — shows zeroes prominently</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 8: CURSOR PROMPTS -->
+  <div class="section">
+    <div class="section-eyebrow">08 — Cursor + Claude Code Prompts</div>
+    <h2>Ready-to-Use Build Prompts</h2>
+    <p class="section-intro">These are copy-paste prompts for Cursor or Claude Code, ordered by build sequence. Start with project setup and work down. Each prompt gives the AI enough context to produce production-ready output.</p>
+
+    <div class="cursor-card">
+      <div class="cursor-header">
+        <div class="cursor-step-label">Step 1 — Project Init</div>
+        <div class="cursor-file">Terminal</div>
+      </div>
+      <div class="cursor-body">
+        <div class="cursor-prompt">Create a new React + TypeScript + Vite project called "secondlook". Install: tailwindcss, framer-motion, react-router-dom, @supabase/supabase-js, react-query.
+
+Set up Tailwind with a custom theme using these CSS variables:
+- --navy: #1C2B4A
+- --teal: #4A8FA8  
+- --cream: #F9F6F1
+- --warm-mid: #EDE8DF
+
+Add a base App.tsx with React Router routes for: /, /onboarding, /check, /dashboard, /family, /settings
+
+Create a .env.local template with: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, VITE_ANTHROPIC_API_KEY (placeholder only — never expose this in frontend, it goes in Edge Function)</div>
+        <div class="cursor-note">Run this in Cursor's terminal, then open the project and begin prompting file by file.</div>
+      </div>
+    </div>
+
+    <div class="cursor-card">
+      <div class="cursor-header">
+        <div class="cursor-step-label">Step 2 — Nora Avatar Component</div>
+        <div class="cursor-file">src/components/Nora/NoraAvatar.tsx</div>
+      </div>
+      <div class="cursor-body">
+        <div class="cursor-prompt">Create a NoraAvatar React component with Framer Motion.
+
+The avatar is a 60px circle with a gradient background (teal #4A8FA8 to navy #1C2B4A). It contains the italic letter "N" in Playfair Display serif font, white, 24px.
+
+Props:
+- isActive: boolean — when true, play a slow breathing animation (scale 1.0→1.03→1.0, opacity 0.9→0.7→0.9, 3 second loop, ease-in-out)
+- size: 'sm' | 'md' | 'lg' — maps to 40px, 60px, 80px
+- showRing: boolean — when true, show a subtle teal glow ring (box-shadow)
+
+The component should feel calm and human, never alarming. Export as default.</div>
+        <div class="cursor-note">After generating, ask Cursor: "Add a slow progress ring around the avatar that fills over N seconds, props: progressDuration (number), onComplete callback"</div>
+      </div>
+    </div>
+
+    <div class="cursor-card">
+      <div class="cursor-header">
+        <div class="cursor-step-label">Step 3 — Supabase Edge Function (Nora's Brain)</div>
+        <div class="cursor-file">supabase/functions/analyze/index.ts</div>
+      </div>
+      <div class="cursor-body">
+        <div class="cursor-prompt">Create a Supabase Edge Function called "analyze" that:
+
+1. Accepts a POST request with JSON body: { message: string, mode: 'gentle'|'standard'|'watchful', userName: string }
+
+2. Validates the request has a valid Supabase JWT (use Supabase's built-in auth)
+
+3. Calls the Anthropic Claude API (claude-sonnet-4-20250514) with:
+   - The system prompt stored in a SYSTEM_PROMPT constant (I will provide this separately)
+   - User message: `User name: ${userName}. User mode: ${mode}. Analyze this message: ${message}`
+   - max_tokens: 800
+
+4. Parses the JSON response from Claude
+
+5. Returns the parsed JSON to the client
+
+6. Never logs or stores the message content
+
+Use the ANTHROPIC_API_KEY from Deno environment variables (Supabase secrets).
+Handle errors gracefully — if Claude fails, return a fallback safe response.
+
+The Claude API endpoint is: https://api.anthropic.com/v1/messages</div>
+        <div class="cursor-note">Set your Anthropic API key as a Supabase secret: <code>supabase secrets set ANTHROPIC_API_KEY=your_key</code></div>
+      </div>
+    </div>
+
+    <div class="cursor-card">
+      <div class="cursor-header">
+        <div class="cursor-step-label">Step 4 — Message Check Page</div>
+        <div class="cursor-file">src/pages/Check.tsx</div>
+      </div>
+      <div class="cursor-body">
+        <div class="cursor-prompt">Create the Check page for SecondLook. This is the main screen where users paste a message for Nora to analyze.
+
+Layout:
+- Top: Nora avatar (medium size) with tagline "Let's take a second look."
+- Center: Large textarea, placeholder "Paste a message, text, or email here..." — warm cream background, no border, large text (18px), generous padding
+- Below textarea: "Get Nora's Second Look" button — navy, rounded pill, full width on mobile
+
+States to handle:
+1. IDLE: textarea + button visible, Nora avatar static
+2. ANALYZING: button disabled, NoraAvatar breathing animation active, "Nora is looking..." text
+3. RESULT: Show RiskCard component with Nora's analysis (pass in the JSON response)
+4. ERROR: Show gentle message — "Something went wrong. Try again." — never alarming
+
+When submitting: call the Supabase Edge Function /analyze. On success, show the result. Log the risk_event to Supabase (metadata only, no message text).
+
+Import and use: NoraAvatar, RiskCard (create as placeholder if not built yet), useNora hook (create this hook too — manages the analysis state and API call)</div>
+      </div>
+    </div>
+
+    <div class="cursor-card">
+      <div class="cursor-header">
+        <div class="cursor-step-label">Step 5 — RiskCard Component</div>
+        <div class="cursor-file">src/components/Check/RiskCard.tsx</div>
+      </div>
+      <div class="cursor-body">
+        <div class="cursor-prompt">Create a RiskCard component that displays Nora's analysis result.
+
+Props: analysis: NoraAnalysis (type with risk_level, nora_message, flags, recommended_actions, pause_seconds)
+
+Design:
+- Card with soft border-radius (20px), white background, subtle shadow
+- Top bar color: navy for high risk, amber #C8A96E for medium, teal for low — NEVER red
+- Nora's message displayed in serif italic (Playfair Display), 18px, navy — this is her personal statement
+- Flags section: each flag shows plain_english and educational_note in a gentle list
+- Recommended actions as quiet link-style buttons
+- PauseButton: the primary action button that is disabled for pause_seconds, then enables. Show a countdown. When enabled, label changes from "Please wait..." to "Continue anyway"
+- Secondary button: "I'd like some help" — this triggers a family contact option
+
+Framer Motion: animate the card in from below (y: 30 → 0, opacity: 0 → 1, duration 0.5s)
+
+Color language reference: low = calm teal, medium = warm amber, high = deep navy — no reds, no warnings</div>
+      </div>
+    </div>
+
+    <div class="cursor-card">
+      <div class="cursor-header">
+        <div class="cursor-step-label">Step 6 — Onboarding Flow</div>
+        <div class="cursor-file">src/pages/Onboarding.tsx</div>
+      </div>
+      <div class="cursor-body">
+        <div class="cursor-prompt">Create a multi-step onboarding flow for SecondLook. Use local state to track currentStep (1–6).
+
+Step 1: "What's your first name?" — single text input, large font, warm cream background. No last name needed. Store in state.
+
+Step 2: Nora's greeting screen. Show the NoraAvatar (large), then animate in the text: "Hi [firstName]. Think of me as a quiet safety net — here whenever you'd like a second look." — serif italic, 22px. Continue button after 2 seconds.
+
+Step 3: Mode selection — three cards side by side (or stacked on mobile). Gentle, Standard (pre-selected), Watchful. Each card shows the mode name, italic quote, and 2-sentence description. Clicking selects it (highlighted border).
+
+Step 4: Family option — "Would you like to share safety summaries with a family member?" — Yes (shows email input) / Maybe later (skips). Friendly, optional.
+
+Step 5: Voice preference — "Would you like Nora to speak her guidance aloud?" Toggle. Brief note: "Nora's voice is generated privately. She does not listen."
+
+Step 6: Privacy transparency — show four clear statements about what is/isn't stored. "Data stored: 0 messages." Finish button saves all settings to Supabase users table.
+
+Progress indicator: soft dots at top, not a progress bar. Navigation: back arrow on each step.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 9: DEVELOPMENT PHASES -->
+  <div class="section">
+    <div class="section-eyebrow">09 — Build Phases</div>
+    <h2>8-Week Build Roadmap</h2>
+    <p class="section-intro">Structured for solo development with Claude Code or Cursor. Each week has a clear output, so you always know what "done" looks like.</p>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">1</div>
+        <div class="phase-header-text">
+          <h3>Foundation & Nora's Brain</h3>
+          <div class="phase-timeline">Week 1–2 · <strong>Core infrastructure</strong></div>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-col">
+          <h4>Build</h4>
+          <ul class="task-list">
+            <li><div class="task-check"></div>Project scaffold (Vite + React + TypeScript + Tailwind)</li>
+            <li><div class="task-check"></div>Supabase project setup, auth, schema migration</li>
+            <li><div class="task-check"></div>Edge Function: analyze (Claude API integration)</li>
+            <li><div class="task-check"></div>NoraAvatar component with breathing animation</li>
+            <li><div class="task-check"></div>useNora hook (API call + state management)</li>
+            <li><div class="task-check"></div>Basic routing (all pages as placeholders)</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Done When</h4>
+          <ul class="task-list">
+            <li><div class="task-check done"></div>You can paste a message and get Nora's JSON back in the console</li>
+            <li><div class="task-check done"></div>Supabase auth login/signup works</li>
+            <li><div class="task-check done"></div>Risk event logs to database without message content</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">2</div>
+        <div class="phase-header-text">
+          <h3>Check Interface + Nora's Presence</h3>
+          <div class="phase-timeline">Week 3–4 · <strong>Core user experience</strong></div>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-col">
+          <h4>Build</h4>
+          <ul class="task-list">
+            <li><div class="task-check"></div>Check page — textarea + submit + states</li>
+            <li><div class="task-check"></div>RiskCard component with color coding</li>
+            <li><div class="task-check"></div>PauseButton with countdown logic</li>
+            <li><div class="task-check"></div>Nora overlay: screen softening + underline animation</li>
+            <li><div class="task-check"></div>Voice output (Web Speech API)</li>
+            <li><div class="task-check"></div>Three-mode logic (filter display by mode)</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Done When</h4>
+          <ul class="task-list">
+            <li><div class="task-check done"></div>Full check flow works end-to-end for all three modes</li>
+            <li><div class="task-check done"></div>Breathing animation feels calm (test with 5 real people)</li>
+            <li><div class="task-check done"></div>Voice works in Chrome and Safari</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">3</div>
+        <div class="phase-header-text">
+          <h3>Onboarding + Dashboard</h3>
+          <div class="phase-timeline">Week 5–6 · <strong>Full user journey</strong></div>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-col">
+          <h4>Build</h4>
+          <ul class="task-list">
+            <li><div class="task-check"></div>6-screen onboarding flow with Nora's greeting</li>
+            <li><div class="task-check"></div>User dashboard (weekly summary, activity count)</li>
+            <li><div class="task-check"></div>Settings page (mode, voice, family permissions)</li>
+            <li><div class="task-check"></div>Family invite system (email invite + token link)</li>
+            <li><div class="task-check"></div>Family dashboard view (summary only, no content)</li>
+            <li><div class="task-check"></div>Weekly summary email (Resend integration)</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Done When</h4>
+          <ul class="task-list">
+            <li><div class="task-check done"></div>New user can complete full onboarding in under 4 minutes</li>
+            <li><div class="task-check done"></div>Family member receives invite and can view summary</li>
+            <li><div class="task-check done"></div>Weekly email sends correctly with real data</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">4</div>
+        <div class="phase-header-text">
+          <h3>Billing, Polish + Launch</h3>
+          <div class="phase-timeline">Week 7–8 · <strong>Production ready</strong></div>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-col">
+          <h4>Build</h4>
+          <ul class="task-list">
+            <li><div class="task-check"></div>Stripe subscription setup ($9 Personal, $15 Family)</li>
+            <li><div class="task-check"></div>Paywall — trial mode: 5 free checks, then upgrade prompt</li>
+            <li><div class="task-check"></div>Mobile-responsive polish (large touch targets, 44px+)</div></li>
+            <li><div class="task-check"></div>Accessibility: high contrast mode, font size settings</li>
+            <li><div class="task-check"></div>Landing page integration (link to app)</li>
+            <li><div class="task-check"></div>Vercel deployment + domain setup</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Done When</h4>
+          <ul class="task-list">
+            <li><div class="task-check done"></div>Payment flow works end-to-end in Stripe test mode</li>
+            <li><div class="task-check done"></div>A 70-year-old can use it without help (usability test)</li>
+            <li><div class="task-check done"></div>Lighthouse accessibility score > 90</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 10: PRIVACY -->
+  <div class="section">
+    <div class="section-eyebrow">10 — Privacy Architecture</div>
+    <h2>Privacy as Product — Not a Feature</h2>
+    <p class="section-intro">These aren't just policies — they're engineering decisions. Each one should be implemented technically, not just promised in terms of service.</p>
+
+    <div class="privacy-grid">
+      <div class="privacy-card">
+        <div class="privacy-icon">🗑️</div>
+        <h4>Zero Message Storage</h4>
+        <p>Message text flows through the Edge Function to Claude and is discarded. Only flag metadata is written to the database. Enforce this in code with a database trigger that rejects any row containing message_text.</p>
+      </div>
+      <div class="privacy-card">
+        <div class="privacy-icon">🔐</div>
+        <h4>Row Level Security</h4>
+        <p>Every Supabase table has RLS enabled. Users can only read their own rows. Family members access only an aggregated summary view — never individual events with identifying information.</p>
+      </div>
+      <div class="privacy-card">
+        <div class="privacy-icon">🧠</div>
+        <h4>No Claude Memory</h4>
+        <p>Each analysis call is stateless. Claude receives no conversation history, no previous messages, and no user profile. Every check is a fresh, isolated request.</p>
+      </div>
+      <div class="privacy-card">
+        <div class="privacy-icon">👁️</div>
+        <h4>Visible Data Dashboard</h4>
+        <p>In Settings, show the user a live read of their data: "Messages stored: 0 · Events logged: 4 · Family connections: 1." Transparency builds trust more than any privacy policy.</p>
+      </div>
+      <div class="privacy-card">
+        <div class="privacy-icon">🗂️</div>
+        <h4>Delete Everything</h4>
+        <p>One-tap account deletion removes all rows across all tables via a Supabase function. No "processing period." Instant, irreversible, confirmed clearly to the user.</p>
+      </div>
+      <div class="privacy-card">
+        <div class="privacy-icon">🚫</div>
+        <h4>No Ads, Ever</h4>
+        <p>Encode this in your Stripe setup: subscription is the only revenue model. No analytics pixels, no third-party tracking scripts. Vercel Analytics only — privacy-first by default.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 11: MONETIZATION -->
+  <div class="section">
+    <div class="section-eyebrow">11 — Monetization</div>
+    <h2>Pricing Structure + Revenue Path</h2>
+
+    <table class="mono-table">
+      <tr>
+        <th>Tier</th>
+        <th>Price</th>
+        <th>Who Pays</th>
+        <th>Includes</th>
+        <th>Stripe Product ID</th>
+      </tr>
+      <tr>
+        <td>Trial</td>
+        <td>Free</td>
+        <td>New user</td>
+        <td>5 message checks, no family, no dashboard</td>
+        <td>No charge — track via users.plan = 'trial'</td>
+      </tr>
+      <tr>
+        <td>Personal</td>
+        <td>$9/mo</td>
+        <td>Individual senior</td>
+        <td>Unlimited checks, all three modes, voice, weekly summary</td>
+        <td>prod_personal_monthly</td>
+      </tr>
+      <tr>
+        <td>Family</td>
+        <td>$15/mo</td>
+        <td>Adult child or family unit</td>
+        <td>Everything in Personal + family dashboard + alert notifications + up to 3 members</td>
+        <td>prod_family_monthly</td>
+      </tr>
+      <tr>
+        <td>Phase 3: White Label</td>
+        <td>$500–2,000/mo</td>
+        <td>Banks, credit unions, insurance</td>
+        <td>Nora embedded in their app, custom branding, enterprise data agreement</td>
+        <td>Manual contract — Stripe invoicing</td>
+      </tr>
+    </table>
+
+    <div class="callout" style="margin-top: 20px;">
+      <div class="callout-icon">📊</div>
+      <div class="callout-body">
+        <h5>Revenue milestone to watch</h5>
+        <p>At 200 Family plan subscribers = $3,000/month recurring. That's the threshold where one bank partnership conversation becomes very easy to have. Focus on that number first.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 12: LAUNCH MILESTONES -->
+  <div class="section">
+    <div class="section-eyebrow">12 — Launch Path</div>
+    <h2>Milestone Map</h2>
+    <p class="section-intro">Build in this order. Each milestone validates the next before you invest in it.</p>
+
+    <div class="milestone-list">
+      <div class="milestone">
+        <div class="milestone-dot"></div>
+        <div class="milestone-content">
+          <div class="milestone-when">Week 2</div>
+          <h4>Nora's Brain Is Working</h4>
+          <p>You can paste a message into the app and get Nora's structured JSON analysis back. The core AI loop is functional. Share with 5 family members of seniors — gather feedback on her tone.</p>
+        </div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-dot"></div>
+        <div class="milestone-content">
+          <div class="milestone-when">Week 4</div>
+          <h4>First Real User Test</h4>
+          <p>Find 3 people aged 65+ to sit with for 30 minutes. Watch them use the check interface. Note every moment of hesitation. Refine font sizes, button sizes, and Nora's copy based on what you see.</p>
+        </div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-dot"></div>
+        <div class="milestone-content">
+          <div class="milestone-when">Week 6</div>
+          <h4>Family Beta</h4>
+          <p>Launch to 10 beta families — one senior + one adult child per pair. Offer free access in exchange for weekly feedback. Focus specifically on: does the family feel surveilled? Does the senior feel respected?</p>
+        </div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-dot"></div>
+        <div class="milestone-content">
+          <div class="milestone-when">Week 8</div>
+          <h4>Paid Launch</h4>
+          <p>Enable Stripe, publish the landing page, and make your first ask. Target: 20 paying Family plan subscribers in the first 30 days. This validates the pricing and the family-as-payer model before any larger marketing spend.</p>
+        </div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-dot"></div>
+        <div class="milestone-content">
+          <div class="milestone-when">Month 3</div>
+          <h4>Distribution Channels</h4>
+          <p>Identify 3 channels: (1) Church/faith community groups for seniors, (2) AARP local chapters, (3) Elder law attorneys who can recommend to clients. One warm intro to each channel is worth 100 cold ads.</p>
+        </div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-dot"></div>
+        <div class="milestone-content">
+          <div class="milestone-when">Month 6</div>
+          <h4>First Partnership Conversation</h4>
+          <p>At 100+ family subscribers, approach one regional bank or credit union about embedding SecondLook as a member benefit. Lead with your retention and trust data, not your technology.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CLOSING -->
+  <div style="text-align: center; padding: 20px 0 40px;">
+    <p style="font-family: 'Playfair Display', serif; font-size: 24px; color: var(--navy); margin-bottom: 10px; font-style: italic;">"Double-check because it matters."</p>
+    <p style="font-size: 14px; color: var(--text-light); font-weight: 300;">SecondLook · Built with Cursor + Claude Code · Powered by the Claude API</p>
+    <div style="margin-top: 24px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+      <span class="tag">React + TypeScript</span>
+      <span class="tag">Supabase</span>
+      <span class="tag tag-amber">Claude API (Nora)</span>
+      <span class="tag">Framer Motion</span>
+      <span class="tag tag-green">Vercel</span>
+      <span class="tag">Stripe</span>
+      <span class="tag">Resend</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

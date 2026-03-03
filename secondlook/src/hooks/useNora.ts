@@ -45,37 +45,42 @@ export function useNora(): UseNoraReturn {
       setAnalysis(analysisResult)
       setState('result')
 
-      // Log risk_event metadata to Firestore — NO message content stored
-      const eventsRef = collection(db, 'users', user.uid, 'riskEvents')
-      const eventDoc = await addDoc(eventsRef, {
-        risk_level: analysisResult.risk_level,
-        flag_types: analysisResult.flags.map(f => f.type),
-        user_action: null,
-        family_notified: false,
-        created_at: serverTimestamp(),
-      })
-      setLastEventId(eventDoc.id)
+      // Log risk_event metadata to Firestore — best-effort, never blocks the result UI
+      try {
+        const eventsRef = collection(db, 'users', user.uid, 'riskEvents')
+        const eventDoc = await addDoc(eventsRef, {
+          risk_level: analysisResult.risk_level,
+          flag_types: analysisResult.flags.map(f => f.type),
+          user_action: null,
+          family_notified: false,
+          created_at: serverTimestamp(),
+        })
+        setLastEventId(eventDoc.id)
 
-      // Trigger family notification for high-risk events
-      if (analysisResult.risk_level === 'high') {
-        const userSnap = await getDoc(doc(db, 'users', user.uid))
-        const userProfile = userSnap.data()
+        // Trigger family notification for high-risk events
+        if (analysisResult.risk_level === 'high') {
+          const userSnap = await getDoc(doc(db, 'users', user.uid))
+          const userProfile = userSnap.data()
 
-        if (
-          userProfile &&
-          (userProfile.family_share_level === 'high_risk_only' ||
-            userProfile.family_share_level === 'weekly_summary')
-        ) {
-          // Fire and forget — don't block the UI
-          const notify = httpsCallable(functions, 'notify')
-          notify({
-            type: 'high_risk_alert',
-            eventId: eventDoc.id,
-            seniorUid: user.uid,
-          }).catch(() => {
-            // Silent fail — notification is best-effort
-          })
+          if (
+            userProfile &&
+            (userProfile.family_share_level === 'high_risk_only' ||
+              userProfile.family_share_level === 'weekly_summary')
+          ) {
+            // Fire and forget — don't block the UI
+            const notify = httpsCallable(functions, 'notify')
+            notify({
+              type: 'high_risk_alert',
+              eventId: eventDoc.id,
+              seniorUid: user.uid,
+            }).catch(() => {
+              // Silent fail — notification is best-effort
+            })
+          }
         }
+      } catch {
+        // Silent fail — Firestore logging is best-effort
+        // The analysis result is already shown to the user
       }
     } catch {
       setState('error')

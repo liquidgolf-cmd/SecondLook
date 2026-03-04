@@ -43,29 +43,39 @@ export const notify = onCall(
         const appUrl = appUrlSecret.value() || 'https://secondlook.app'
         const inviteUrl = `${appUrl}/family/accept?token=${payload.inviteToken}`
 
-        await fetch(RESEND_API_URL, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${resendKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            from: 'Nora at SecondLook <nora@secondlook.app>',
-            to: [payload.familyEmail],
-            subject: `${seniorName} has invited you to SecondLook`,
-            html: `
-              <div style="font-family: Georgia, serif; max-width: 520px; margin: 0 auto; padding: 40px 20px; color: #1C2B4A;">
-                <h2 style="font-style: italic; font-weight: normal;">${seniorName} would like to share safety summaries with you.</h2>
-                <p>SecondLook helps ${seniorName} spot unusual patterns in messages and texts. They've invited you as a trusted family member to receive summaries.</p>
-                <p style="font-size: 0.9rem; color: #4A5568;">You'll only see summary counts — never the messages themselves. ${seniorName} is always in control of what you see.</p>
-                <a href="${inviteUrl}" style="display: inline-block; padding: 14px 28px; background: #1C2B4A; color: white; text-decoration: none; border-radius: 999px; margin: 20px 0; font-family: sans-serif;">
-                  Accept invite
-                </a>
-                <p style="font-size: 0.8rem; color: #7A8BA0;">If you don't recognize this, you can safely ignore this email.</p>
-              </div>
-            `,
-          }),
-        })
+        try {
+          const res = await fetch(RESEND_API_URL, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${resendKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              from: 'Nora at SecondLook <onboarding@resend.dev>',
+              to: [payload.familyEmail],
+              subject: `${seniorName} has invited you to SecondLook`,
+              html: `
+                <div style="font-family: Georgia, serif; max-width: 520px; margin: 0 auto; padding: 40px 20px; color: #1C2B4A;">
+                  <h2 style="font-style: italic; font-weight: normal;">${seniorName} would like to share safety summaries with you.</h2>
+                  <p>SecondLook helps ${seniorName} spot unusual patterns in messages and texts. They've invited you as a trusted family member to receive summaries.</p>
+                  <p style="font-size: 0.9rem; color: #4A5568;">You'll only see summary counts — never the messages themselves. ${seniorName} is always in control of what you see.</p>
+                  <a href="${inviteUrl}" style="display: inline-block; padding: 14px 28px; background: #1C2B4A; color: white; text-decoration: none; border-radius: 999px; margin: 20px 0; font-family: sans-serif;">
+                    Accept invite
+                  </a>
+                  <p style="font-size: 0.8rem; color: #7A8BA0;">If you don't recognize this, you can safely ignore this email.</p>
+                </div>
+              `,
+            }),
+          })
+          if (!res.ok) {
+            const body = await res.text()
+            console.error('Resend family_invite error:', res.status, body)
+          } else {
+            console.log('Family invite email sent to:', payload.familyEmail)
+          }
+        } catch (err) {
+          console.error('Family invite fetch failed:', err)
+        }
       }
 
       if (payload.type === 'high_risk_alert') {
@@ -86,14 +96,14 @@ export const notify = onCall(
             const familyUser = await admin.auth().getUser(conn.family_user_id)
             if (!familyUser.email) continue
 
-            await fetch(RESEND_API_URL, {
+            const res = await fetch(RESEND_API_URL, {
               method: 'POST',
               headers: {
                 'Authorization': `Bearer ${resendKey}`,
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                from: 'Nora at SecondLook <nora@secondlook.app>',
+                from: 'Nora at SecondLook <onboarding@resend.dev>',
                 to: [familyUser.email],
                 subject: `SecondLook — ${seniorName} may want to check in`,
                 html: `
@@ -106,6 +116,12 @@ export const notify = onCall(
                 `,
               }),
             })
+            if (!res.ok) {
+              const body = await res.text()
+              console.error('Resend high_risk_alert error:', res.status, body, 'recipient:', familyUser.email)
+            } else {
+              console.log('High risk alert email sent to:', familyUser.email)
+            }
           } catch (err) {
             console.error('Failed to notify family member:', conn.family_user_id, err)
           }
@@ -150,14 +166,14 @@ export const notify = onCall(
             const familyUser = await admin.auth().getUser(conn.family_user_id)
             if (!familyUser.email) continue
 
-            await fetch(RESEND_API_URL, {
+            const res = await fetch(RESEND_API_URL, {
               method: 'POST',
               headers: {
                 'Authorization': `Bearer ${resendKey}`,
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                from: 'Nora at SecondLook <nora@secondlook.app>',
+                from: 'Nora at SecondLook <onboarding@resend.dev>',
                 to: [familyUser.email],
                 subject: `${seniorName}'s SecondLook Weekly Summary`,
                 html: `
@@ -176,6 +192,12 @@ export const notify = onCall(
                 `,
               }),
             })
+            if (!res.ok) {
+              const body = await res.text()
+              console.error('Resend weekly_summary error:', res.status, body, 'recipient:', familyUser.email)
+            } else {
+              console.log('Weekly summary email sent to:', familyUser.email)
+            }
           } catch (err) {
             console.error('Failed to send weekly summary to family member:', err)
           }
